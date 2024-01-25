@@ -43,8 +43,12 @@ const ChatArea = ({ chats }: { chats: IChat[] }) => {
     <section className="h-[calc(100vh-10.5rem)] bg-orange-50">
       <ScrollArea className="h-full">
         <div className="p-4">
-          {chats?.map((chat) => (
-            <ChatItem isSender={chat.isSender} message={chat.message} />
+          {chats?.map((chat, index) => (
+            <ChatItem
+              isSender={chat.isSender}
+              message={chat.message}
+              key={index}
+            />
           ))}
         </div>
       </ScrollArea>
@@ -101,10 +105,11 @@ const UsersList = ({
       <h1 className="text-xl border-b p-4 font-bold text-orange-500">Users</h1>
       <ScrollArea className="h-full">
         <ul className="flex flex-col gap-4 p-4 h-full bg-orange-50 min-h-[90vh]">
-          {users?.map((user) => (
+          {users?.map((user, index) => (
             <li
               className="border p-2 rounded-md cursor-pointer bg-white hover:bg-orange-200"
               onClick={() => selectUser(user)}
+              key={index}
             >
               {user}
             </li>
@@ -116,15 +121,8 @@ const UsersList = ({
 };
 
 const InstantConnect = () => {
-  const {
-    sendMessage,
-    messages,
-    userId,
-    isFree,
-    receiverId,
-    onSkip
-  } = useSocket();
-
+  const { sendMessage, messages, userId, isFree, receiverId, onSkip } =
+    useSocket();
 
   useEffect(() => {
     console.log("Receiver Id", receiverId);
