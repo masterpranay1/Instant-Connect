@@ -40,7 +40,7 @@ const ChatItem = ({ isSender, message }: IChat) => {
 
 const ChatArea = ({ chats }: { chats: IChat[] }) => {
   return (
-    <section className="h-[calc(100vh-10.5rem)] bg-orange-50">
+    <section className="h-[calc(100vh-14.5rem)] bg-orange-50">
       <ScrollArea className="h-full">
         <div className="p-4">
           {chats?.map((chat, index) => (

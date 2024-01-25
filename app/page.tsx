@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useSocket } from "@/context/SocketProvider";
+import { useRouter } from "next/navigation";
 
 const Header = () => {
   return (
@@ -30,12 +31,19 @@ export default function Home() {
   const { userId, setUserId } = useSocket();
 
   const [userIdLocal, setUserIdLocal] = useState<string>(userId);
+  const navigate = useRouter();
 
   useEffect(() => {
     return () => {
       setLoading(false);
     };
   }, []);
+
+  useEffect(() => {
+    if (userId) {
+      navigate.push("/chat/instant-connect");
+    }
+  }, [userId]);
 
   return (
     <main className="w-full min-h-screen bg-slate-50 flex flex-col items-center p-16">

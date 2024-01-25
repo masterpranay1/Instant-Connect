@@ -120,6 +120,8 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       _socket.off("message", onMessageRec);
       _socket.disconnect();
       setSocket(undefined);
+      setReceiverId(undefined);
+      setUserId("");
     };
   }, [userId]);
 
