@@ -5,6 +5,17 @@ import { ExternalLink, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { useSocket } from "@/context/SocketProvider";
+
 const Header = () => {
   return (
     <header className="w-1/2 rounded bg-white flex flex-col items-center justify-between px-16 py-4 mb-8 border border-gray-200">
@@ -16,6 +27,9 @@ const Header = () => {
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
+  const { userId, setUserId } = useSocket();
+
+  const [userIdLocal, setUserIdLocal] = useState<string>(userId);
 
   useEffect(() => {
     return () => {
@@ -27,31 +41,65 @@ export default function Home() {
     <main className="w-full min-h-screen bg-slate-50 flex flex-col items-center p-16">
       <Header />
       <div className="rounded w-1/2 h-48 bg-white border border-gray-200 grid place-content-center">
-        {!loading && <Button
-          className="bg-orange-600 hover:bg-orange-500 flex gap-2 items-center justify-center"
-          size={"lg"}
-          asChild
-          onClick={() => setLoading(true)}
-        >
-          <Link href="/chat">
-            <p>Try Instant Connect</p>
-            <ExternalLink />
-          </Link>
-        </Button>}
+        {
+          <Dialog>
+            <DialogTrigger>
+              <Button
+                className="bg-orange-600 hover:bg-orange-500 flex gap-2 items-center justify-center"
+                size={"lg"}
+                asChild
+              >
+                <p>Try Instant Connect</p>
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Enter User Id</DialogTitle>
+              </DialogHeader>
 
-        {loading && (
-          <Button
-            className="bg-orange-600 hover:bg-orange-500 flex gap-2 items-center justify-center"
-            size={"lg"}
-            asChild
-            disabled
-          >
-            <span>
-              <p>Connecting</p>
-              <Loader2 className="animate-spin" />
-            </span>
-          </Button>
-        )}
+              <Input
+                className="w-full"
+                placeholder="Enter User Id"
+                type="text"
+                value={userIdLocal}
+                onChange={(e) => setUserIdLocal(e.target.value)}
+              />
+
+              <DialogFooter>
+                {!loading && (
+                  <Button
+                    className="bg-orange-600 hover:bg-orange-500 flex gap-2 items-center justify-center"
+                    size={"lg"}
+                    asChild
+                    onClick={() => {
+                      setUserId(userIdLocal);
+                      setLoading(true);
+                    }}
+                  >
+                    <Link href="/chat/instant-connect">
+                      <p>Chat</p>
+                      <ExternalLink />
+                    </Link>
+                  </Button>
+                )}
+
+                {loading && (
+                  <Button
+                    className="bg-orange-600 hover:bg-orange-500 flex gap-2 items-center justify-center"
+                    size={"lg"}
+                    asChild
+                    disabled
+                  >
+                    <span>
+                      <p>Connecting</p>
+                      <Loader2 className="animate-spin" />
+                    </span>
+                  </Button>
+                )}
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        }
       </div>
     </main>
   );
